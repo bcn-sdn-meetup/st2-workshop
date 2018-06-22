@@ -12,7 +12,7 @@
 | 18:45 | ST2 Foundations |
 | 19:00 | ST2 Hands-on Lab |
 | 20:15 | Wrap-up |
-| 20:30 | one beer? 🍻 |
+| 20:30 | beers? 🍻 |
 
 ## SDN Barcelona Meetup
 
