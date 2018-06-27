@@ -2,6 +2,12 @@
 
 ## ST2 Foundations
 
+## Introduction
+
+* StackStorm(ST2) is an open source software project for providing flexible event-driven automation
+* We could understand ST2 ad the IFTTT(if-this-then-that) of IT Infrastructure
+* ST wasn't built to replace other config management tooling, they work together
+
 ## Why
 
 * <span style="color:yellow">Facilitated Troubleshooting</span> - triggering on system failures captured by  monitoring systems, running a series of diagnostic checks and posting results to a shared communication context.
