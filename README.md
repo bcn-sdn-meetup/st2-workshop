@@ -33,4 +33,4 @@ DEBUG: cmdline: pandoc -t html5 --template=reveal.js/reveal-template.html --self
 	* [https://gist.github.com/aaronwolen/5017084] included and improved with the comments
 
 
-> Special thanks to  [Daniel Caballero](https://github.com/dcaba) for creating so cool bash scripts to generate this slides :)
+> Special thanks to  [Daniel Caballero](https://github.com/dcaba) for creating so cool bash scripts to generate these slides :)
