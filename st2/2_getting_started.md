@@ -2,6 +2,13 @@
 
 ## Getting started
 
+Register on Arista Website (https://www.arista.com/en/user-registration)
+
+Download Arista vEOS (https://www.arista.com/en/support/software-download) and add it as a Vagrant box
+```
+vagrant box add --name veos ./vEOS-lab-4.20.1F-virtualbox.box
+```
+
 ST2 Authentication
 ```
 % export ST2_AUTH_TOKEN=`st2 auth -t -p 'Ch@ngeMe' st2admin`
@@ -11,28 +18,6 @@ ST2 Authentication
 Run a local shell command
 ```
 % st2 run core.local -- uname -r
-```
-
-Run a shell command on remote hosts. Requires passwordless SSH configured.
-```
-% st2 run core.remote hosts='192.168.100.11' username='stanley' -- uname -r
-```
-
-## Configure st2 authentication
-
-There is a user (stanley) already provisioned in ST2 with a preconfigured key in /home/stanley/.ssh/stanley_rsa.pub
-In both VyOS routers we should create the user with the proper public key
-
-```
-set system login user stanley authentication public-keys key-stanley-pub key "public key base64"
-set system login user stanley authentication public-keys key-stanley-pub type ssh-rsa
-commit
-```
-
-In ST2, now it works!
-
-```bash
-% st2 run core.remote hosts='192.168.100.11' username='stanley' -- uname
 ```
 
 ## Let's use Napalm pack
