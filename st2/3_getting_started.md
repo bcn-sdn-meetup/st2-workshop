@@ -9,6 +9,8 @@ Download Arista vEOS (https://www.arista.com/en/support/software-download) and a
 vagrant box add --name veos ./vEOS-lab-4.20.1F-virtualbox.box
 ```
 
+## Basic ST2 usage
+
 ST2 Authentication
 ```
 % export ST2_AUTH_TOKEN=`st2 auth -t -p 'Ch@ngeMe' st2admin`
