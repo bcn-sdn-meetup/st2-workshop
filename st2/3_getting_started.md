@@ -44,27 +44,31 @@ List Action list
 
 ## Configure NAPALM authentication
 
-In /opt/stackstorm/configs/napalm.yaml
+It's already provided for you in /opt/stackstorm/configs/napalm.yaml
 
 ```yaml
 ---
 html_table_class: napalm
 
 credentials:
-  local:
-    username: vagrant
-    password: vagrant
+  core:
+    username: stanley
+    password: stanley 
 
 devices:
-  - hostname: 192.168.100.11
-    driver: vyos
-    credentials: local
+- hostname: 192.168.100.11
+  driver: eos
+  credentials: core
+- hostname: 192.168.100.12 
+  driver: eos 
+  credentials: core 
 ```
 
 ## Apply configuration changes
 
 ```
 % st2ctl reload --register-configs
+
 Registering content...[flags = --config-file /etc/st2/st2.conf --register-configs]
 2018-06-27 20:21:07,291 INFO [-] Connecting to database "st2" @ "127.0.0.1:27017" as user "stackstorm".
 2018-06-27 20:21:07,689 INFO [-] =========================================================
