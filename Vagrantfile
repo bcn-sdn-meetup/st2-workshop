@@ -23,8 +23,6 @@ Vagrant.configure("2") do |config|
     r1.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
-    r1.vm.synced_folder ".", "/vagrant", disabled: true
-
     r1.vm.network "private_network", ip: "192.168.100.11"
     r1.vm.provision "shell", inline: <<-SHELL
       sleep 30
@@ -47,7 +45,6 @@ Vagrant.configure("2") do |config|
     r2.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
-    r2.vm.synced_folder ".", "/vagrant", disabled: true
 
     r2.vm.network "private_network", ip: "192.168.100.12"
     r2.vm.provision "shell", inline: <<-SHELL
