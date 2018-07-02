@@ -24,7 +24,7 @@ Run a local shell command
 
 ## Let's use Napalm pack
 
-Install pack
+Install pack (already there)
 ```
 % st2 pack install napalm
 ```
@@ -65,6 +65,8 @@ devices:
 ```
 
 ## Apply configuration changes
+
+Every time you change configuration you should reapply it:
 
 ```
 % st2ctl reload --register-configs
