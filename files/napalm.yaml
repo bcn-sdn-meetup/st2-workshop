@@ -8,8 +8,8 @@ credentials:
 
 devices:
 - hostname: 192.168.100.11
-  driver: eos
+  driver: junos 
   credentials: core
 - hostname: 192.168.100.12 
-  driver: eos 
+  driver: junos
   credentials: core 
