@@ -1,3 +1,4 @@
+
 #
 
 ## Getting started
@@ -24,7 +25,7 @@ Run a local shell command
 
 ## Let's use Napalm pack
 
-Install pack (already there)
+Install pack (already there):
 ```
 % st2 pack install napalm
 ```
@@ -46,7 +47,7 @@ List Action list
 
 It's already provided for you in /opt/stackstorm/configs/napalm.yaml
 
-```yaml
+```
 ---
 html_table_class: napalm
 
@@ -126,18 +127,57 @@ result:
   stdout: ''
 ```
 
+## Actions
+
+Build custom actions: [https://docs.stackstorm.com/actions.html](https://docs.stackstorm.com/actions.html)
+
+To register a new action:
+
+* Place it into the content location.
+* Tell the system that the action is available.
+* The actions are grouped in packs and located at /opt/stackstorm/packs
+
+## 
+
+```
+cat /opt/stackstorm/packs/napalm/actions/cli.py
+```
+
+```python
+from lib.action import NapalmBaseAction
+class NapalmCLI(NapalmBaseAction):
+    """Run CLI commands on a network device via NAPALM
+    """
+    def run(self, commands, **std_kwargs):
+
+        with self.get_driver(**std_kwargs) as device:
+            cmds_output = device.cli(commands)
+            result = {'raw': cmds_output}
+            result_with_pre = {}
+            result_as_array = {}
+            for this_cmd in cmds_output:
+                result_as_array[this_cmd] = cmds_output[this_cmd].split('\n')
+                if self.htmlout:
+                    result_with_pre[this_cmd] = "<pre>" + cmds_output[this_cmd] + "</pre>"
+            result['raw_array'] = result_as_array
+            if self.htmlout:
+                result['html'] = self.html_out(result_with_pre)
+        return (True, result)
+```
+
+
 ## Workflow
 
 * Actions, by design, are intended to perfom a single task well
 * However, in real world, we usually run several discrte tasks, and includes some decision making along the way -> Workflows
 * **Mistral** is an OpenStack project that provides (included in ST2):
-  * A standarised YAML-based language for defining workflows
-  * Open source software for receiving and processing workflows execution requests 
+    * A standarised YAML-based language for defining workflows
+    * Open source software for receiving and processing workflows execution requests 
 
 
 ## Example Workflow
 
-```yaml
+```
 --- 
 version:'2.0'
 napalm.interface_down_workflow:
@@ -291,7 +331,9 @@ st2 trigger list --pack napalm
 ##
 
 ```
-st2 sensor enable napalm.NapalmLLDPSensor+---------------+--------------------------------------------------------------+
+% st2 sensor enable napalm.NapalmLLDPSensor
+
++---------------+--------------------------------------------------------------+
 | Property      | Value                                                        |
 +---------------+--------------------------------------------------------------+
 | id            | 5b39c90d02ebd507dacc6a42                                     |
@@ -317,10 +359,11 @@ tail -f /var/log/st2/st2sensorcontainer.log
 
 Rules is the key part of ST2, it brings together actions and sensors and triggers to create event driven automation.
 
-https://docs.stackstorm.com/rules.html
+[https://docs.stackstorm.com/rules.html](https://docs.stackstorm.com/rules.html)
 
 ```
-st2 rule list
+% st2 rule list
+
 +-----------------------+---------+-----------------------+---------+
 | ref                   | pack    | description           | enabled |
 +-----------------------+---------+-----------------------+---------+
@@ -349,7 +392,7 @@ st2 rule list
 
 ##
 
-```yaml
+```
 ---
 name: "lldp_notify"
 pack: "napalm"
@@ -371,12 +414,8 @@ action:
 
 ## Managing rules
 
-To deploy a rule, use the CLI command: `st2 rule create ${PATH_TO_RULE}`, for example:
-
-`st2 rule create /usr/share/doc/st2/examples/rules/sample_rule_with_webhook.yaml`
-
-To reload all the rules, use `st2ctl reload --register-rules`.
-
-Custom rules can be placed in any accessible folder on local system. By convention, custom rules are placed in the /opt/stackstorm/packs/<pack_name>/rules directory.
-
-To make testing rules easier we provide a `st2-rule-tester` tool which can evaluate rules against trigger instances without running any of the StackStorm components.
+* To deploy a rule, use the CLI command: `st2 rule create ${PATH_TO_RULE}`,
+    * `st2 rule create /usr/share/doc/st2/examples/rules/sample_rule_with_webhook.yaml`
+* To reload all the rules, use `st2ctl reload --register-rules`.
+* Custom rules can be placed in any accessible folder on local system. By convention, custom rules are placed in the /opt/stackstorm/packs/<pack_name>/rules directory.
+* To make testing rules easier we provide a `st2-rule-tester` tool which can evaluate rules against trigger instances without running any of the StackStorm components.

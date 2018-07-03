@@ -1,6 +1,6 @@
 #
 
-## ST2 Foundations
+## StackStorm
 
 ## Introduction
 

@@ -1,10 +1,11 @@
+
 #
 
 ## NAPALM
 
 Network Automation and Programmability Abstraction Layer with Multivendor support
 
-Napalm (https://napalm-automation.net)[https://napalm-automation.net/] is a vendor neutral, cross-platform open source project that provides a unified API to network devices.
+Napalm [https://napalm-automation.net](https://napalm-automation.net/) is a vendor neutral, cross-platform open source project that provides a unified API to network devices.
 
 ![](https://avatars2.githubusercontent.com/u/16415577?s=400&v=4)
 
