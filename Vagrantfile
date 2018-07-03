@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     st2.vm.network "private_network", ip: "192.168.100.10"
     st2.vm.provision "file", source: "files/napalm.yaml", destination: "/tmp/napalm.yaml"
     st2.vm.provision "shell", inline: <<-SHELL
-	sudo cp /tmp/napalm.yaml /opt/stackstorm/configs/napalm.yaml	
+	sudo cp /tmp/napalm.yaml /opt/stackstorm/configs/napalm.yaml
 	export ST2_AUTH_TOKEN=`st2 auth -t -p 'Ch@ngeMe' st2admin`
 	st2 pack install napalm
 	st2ctl reload --register-configs
@@ -24,6 +24,7 @@ Vagrant.configure("2") do |config|
       v.memory = 2048
     end
     r1.vm.network "private_network", ip: "192.168.100.11"
+    r1.vm.network "private_network", virtualbox__intnet: "net2", auto_config: false
     r1.vm.provision "shell", inline: <<-SHELL
       sleep 30
       FastCli -p 15 -c "configure
@@ -47,11 +48,12 @@ Vagrant.configure("2") do |config|
     end
 
     r2.vm.network "private_network", ip: "192.168.100.12"
+    r2.vm.network "private_network", virtualbox__intnet: "net2", auto_config: false
     r2.vm.provision "shell", inline: <<-SHELL
       sleep 30
       FastCli -p 15 -c "configure
       user stanley privilege 15 secret stanley
-      management api http-commands      
+      management api http-commands
       interface Ethernet1
         no switchport
         ip address 192.168.100.12/24
