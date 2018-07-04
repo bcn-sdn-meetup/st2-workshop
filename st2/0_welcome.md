@@ -4,7 +4,7 @@
 
 #
 
-## SDN Barcelona Meetup
+## SDN Barcelona <span style="color:yellow">Meetup</span>
 
 <div id=left>
 
@@ -47,3 +47,12 @@ Submit your presentations here:
 * <span style="color:yellow">Clone</span> GitHub repository: [https://github.com/bcn-sdn-meetup/st2-workshop](https://github.com/bcn-sdn-meetup/st2-workshop)
 * <span style="color:yellow">Slides</span> are available there or [https://bcn-sdn-meetup.github.io/st2-workshop/st2](https://bcn-sdn-meetup.github.io/st2-workshop/st2/#/)
 * In the repo directory, run <span style="color:yellow">vagrant up</span> to setup StackStorm + 2 Juniper Routers (this takes some time)
+
+```
+% vagrant status
+
+Current machine states:
+st2                       running (virtualbox)
+r1                        running (virtualbox)
+r2                        running (virtualbox)
+```

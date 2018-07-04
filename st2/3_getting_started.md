@@ -1,12 +1,18 @@
 
 #
 
+## Getting <span style="color:yellow">Started</span>
+
 ## Basic ST2 usage
+
+Get into the StackStorm machine
+```
+vagrant ssh st2
+```
 
 ST2 Authentication
 ```
 % export ST2_AUTH_TOKEN=`st2 auth -t -p 'Ch@ngeMe' st2admin`
-% st2 login st2admin --password 'Ch@ngeMe' --write-password
 ```
 
 Run a local shell command
@@ -47,7 +53,7 @@ List Action list
 
 ## Configure NAPALM authentication
 
-It's already provided for you in /opt/stackstorm/configs/napalm.yaml
+It's already provided for you in <span style="color:yellow">/opt/stackstorm/configs/napalm.yaml</span>
 
 ```
 ---
@@ -266,9 +272,9 @@ To register a new action:
 
 * Place it into the content location.
 * Tell the system that the action is available.
-* The actions are grouped in packs and located at /opt/stackstorm/packs
+* The actions are grouped in packs and located at <span style="color:yellow">/opt/stackstorm/packs</span>
 
-##
+## What does an action look like?
 
 ```
 cat /opt/stackstorm/packs/napalm/actions/cli.py
@@ -301,12 +307,12 @@ class NapalmCLI(NapalmBaseAction):
 
 * Actions, by design, are intended to perfom a single task well
 * However, in real world we usually run several discrete tasks and include some decision making along the way -> Workflows
-* **Mistral** is an OpenStack project that provides (included in ST2):
+* <span style="color:yellow">Mistral</span> is an OpenStack project that provides (included in ST2):
     * A standarised YAML-based language for defining workflows
     * Open source software for receiving and processing workflows execution requests
 
 
-## Example Workflow
+## Workflow definition
 
 ```
 ---
@@ -337,7 +343,7 @@ napalm.interface_down_workflow:
         lastlines: 10
 ```
 
-##
+## Workflow exectution
 
 ```
 % st2 run napalm.interface_down_workflow hostname=192.168.100.11 interface=ge-0/0/1 message=debug
@@ -378,6 +384,11 @@ Jul  4 10:33:07  r1 file[2349]: UI_CHILD_START: Starting child ''/usr/sbin/cli''
   stdout: ''
 start_timestamp: Wed, 04 Jul 2018 10:32:53 UTC
 end_timestamp: Wed, 04 Jul 2018 10:33:09 UTC
+```
+
+##
+
+```
 +--------------------------+------------------------+-------------------------+-----------------------+-------------------------------+
 | id                       | status                 | task                    | action                | start_timestamp               |
 +--------------------------+------------------------+-------------------------+-----------------------+-------------------------------+
@@ -496,7 +507,8 @@ st2 trigger list --pack napalm
 |               | ]                                                            |
 | uid           | sensor_type:napalm:NapalmLLDPSensor                          |
 +---------------+--------------------------------------------------------------+
-
+```
+```
 tail -f /var/log/st2/st2sensorcontainer.log
 ```
 
@@ -559,8 +571,8 @@ action:
 
 ## Managing rules
 
-* To deploy a rule, use the CLI command: `st2 rule create ${PATH_TO_RULE}`,
-    * `st2 rule create /usr/share/doc/st2/examples/rules/sample_rule_with_webhook.yaml`
-* To reload all the rules, use `st2ctl reload --register-rules`.
+* To deploy a rule, use the CLI command: <span style="color:yellow">st2 rule create ${PATH_TO_RULE}</span>,
+    * <span style="color:yellow">st2 rule create</span>
+* To reload all the rules, use <span style="color:yellow">st2ctl reload --register-rules</span>
 * Custom rules can be placed in any accessible folder on local system. By convention, custom rules are placed in the /opt/stackstorm/packs/<pack_name>/rules directory.
-* To make testing rules easier we provide a `st2-rule-tester` tool which can evaluate rules against trigger instances without running any of the StackStorm components.
+* To make testing rules easier we provide a <span style="color:yellow">st2-rule-tester</span> tool which can evaluate rules against trigger instances without running any of the StackStorm components.
