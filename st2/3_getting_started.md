@@ -1,6 +1,8 @@
 
 #
 
+## Getting Started
+
 ## Basic ST2 usage
 
 ST2 Authentication
@@ -564,3 +566,6 @@ action:
 * To reload all the rules, use `st2ctl reload --register-rules`.
 * Custom rules can be placed in any accessible folder on local system. By convention, custom rules are placed in the /opt/stackstorm/packs/<pack_name>/rules directory.
 * To make testing rules easier we provide a `st2-rule-tester` tool which can evaluate rules against trigger instances without running any of the StackStorm components.
+
+## ST2 web interface
+[](media/st2-web.png)
