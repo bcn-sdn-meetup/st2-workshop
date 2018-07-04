@@ -1,5 +1,5 @@
 % Closing the automation loop with <span style="color:yellow">StackStorm</span>
-% <span style="color:yellow">SDN</span> Barcelona Meetup, July 18
+% <span style="color:yellow">SDN</span> Barcelona Meetup, 4th July 2018
 % @xen0l ![](media/twitter-logo.png){ width=5% } @chadell0 ![](media/twitter-logo.png){ width=5% }
 
 #
