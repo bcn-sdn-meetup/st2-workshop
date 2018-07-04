@@ -1,19 +1,18 @@
 #
 
-## StackStorm
+## <span style="color:yellow">StackStorm</span>
 
 ## Introduction
 
 * StackStorm(ST2) is an open source software project for providing flexible event-driven automation
-* We could understand ST2 ad the IFTTT(if-this-then-that) of IT Infrastructure
-* ST wasn't built to replace other config management tooling, they work together
+* We could understand ST2 as the <span style="color:yellow">IFTTT(if-this-then-that)</span> of IT Infrastructure
+* ST2 wasn't built to replace other config management tooling, they work together
 
 ## Why
 
 * <span style="color:yellow">Facilitated Troubleshooting</span> - triggering on system failures captured by  monitoring systems, running a series of diagnostic checks and posting results to a shared communication context.
 * <span style="color:yellow">Automated remediation</span> - identifying and verifying failures, properly evacuating instances and notifying, but if anything goes wrong - freezing the workflow and paging a human.
 * <span style="color:yellow">Continuous deployment</span> - build and test with CI tooling, provision a new infra, turn on some traffic with the load balancer, and roll-forward or roll-back, based on app performance data.
-
 
 ## How it works
 
@@ -37,3 +36,7 @@
 ##  Concepts (IV)
 
 * <span style="color:yellow">Audit</span> trail of action executions, manual or automated, is recorded and stored with full details of triggering context and execution results. It is also captured in audit logs for integrating with external logging and analytical tools: LogStash, Splunk, statsd, syslog.
+
+## Architecture 
+
+![](https://docs.stackstorm.com/_images/st2-deployment-big-picture.png){ width=70% }
