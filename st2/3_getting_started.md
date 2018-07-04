@@ -1,7 +1,11 @@
 
 #
 
+<<<<<<< HEAD
 ## Getting <span style="color:yellow">Started</span>
+=======
+## Getting Started
+>>>>>>> dbaee08e3c54eb1ac235fc322e92dd6b00bce459
 
 ## Basic ST2 usage
 
@@ -576,3 +580,6 @@ action:
 * To reload all the rules, use <span style="color:yellow">st2ctl reload --register-rules</span>
 * Custom rules can be placed in any accessible folder on local system. By convention, custom rules are placed in the /opt/stackstorm/packs/<pack_name>/rules directory.
 * To make testing rules easier we provide a <span style="color:yellow">st2-rule-tester</span> tool which can evaluate rules against trigger instances without running any of the StackStorm components.
+
+## ST2 web interface
+[](media/st2-web.png)
