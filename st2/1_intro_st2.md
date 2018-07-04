@@ -36,7 +36,3 @@
 ##  Concepts (IV)
 
 * <span style="color:yellow">Audit</span> trail of action executions, manual or automated, is recorded and stored with full details of triggering context and execution results. It is also captured in audit logs for integrating with external logging and analytical tools: LogStash, Splunk, statsd, syslog.
-
-## Architecture 
-
-![](https://docs.stackstorm.com/_images/st2-deployment-big-picture.png){ width=70% }
