@@ -1,15 +1,6 @@
 
 #
 
-## Getting started
-
-Register on Arista Website (https://www.arista.com/en/user-registration)
-
-Download Arista vEOS (https://www.arista.com/en/support/software-download) and add it as a Vagrant box
-```
-vagrant box add --name veos ./vEOS-lab-4.20.1F-virtualbox.box
-```
-
 ## Basic ST2 usage
 
 ST2 Authentication
@@ -21,6 +12,17 @@ ST2 Authentication
 Run a local shell command
 ```
 % st2 run core.local -- uname -r
+.
+id: 5b3c9dfd02ebd5059ccaea67
+status: succeeded
+parameters:
+  cmd: uname -r
+result:
+  failed: false
+  return_code: 0
+  stderr: ''
+  stdout: 4.4.0-116-generic
+  succeeded: true
 ```
 
 ## Let's use Napalm pack
@@ -53,16 +55,16 @@ html_table_class: napalm
 
 credentials:
   core:
-    username: stanley
-    password: stanley 
+    username: root
+    password: Juniper
 
 devices:
 - hostname: 192.168.100.11
-  driver: eos
+  driver: junos
   credentials: core
-- hostname: 192.168.100.12 
-  driver: eos 
-  credentials: core 
+- hostname: 192.168.100.12
+  driver: junos
+  credentials: core
 ```
 
 ## Apply configuration changes
@@ -86,9 +88,9 @@ st2actionrunner PID: 1147
 ## First command, get data
 
 ```
-st2 run napalm.get_facts hostname=192.168.100.11
-.
-id: 5b3a02c902ebd506863c8e81
+% st2 run napalm.get_facts hostname=192.168.100.11
+....
+id: 5b3c9e2902ebd5059ccaea6a
 status: succeeded
 parameters:
   hostname: 192.168.100.11
@@ -96,33 +98,162 @@ result:
   exit_code: 0
   result:
     raw:
-      fqdn: localhost
-      hostname: localhost
+      fqdn: r1
+      hostname: r1
       interface_list:
-      - Ethernet1
-      - Management1
-      model: vEOS
-      os_version: 4.20.1F-6820520.4201F
-      serial_number: ''
-      uptime: 10991
-      vendor: Arista
+      - ge-0/0/0
+      - gr-0/0/0
+      - ip-0/0/0
+      - lsq-0/0/0
+      - lt-0/0/0
+      - mt-0/0/0
+      - sp-0/0/0
+      - ge-0/0/1
+      - ge-0/0/2
+      - .local.
+      - dsc
+      - gre
+      - ipip
+      - irb
+      - lo0
+      - lsi
+      - mtun
+      - pimd
+      - pime
+      - pp0
+      - ppd0
+      - ppe0
+      - st0
+      - tap
+      - vlan
+      model: FIREFLY-PERIMETER
+      os_version: 12.1X47-D15.4
+      serial_number: 370eb4814607
+      uptime: 697
+      vendor: Juniper
   stderr: ''
   stdout: ''
 ```
 
-## Submit configuration
+## Execute commands
 
 ```
-st2 run napalm.loadconfig hostname=192.168.100.11 config_text="hostname something"
-..
-id: 5b3a02c102ebd506863c8e7e
+% st2 run napalm.cli hostname=192.168.100.11 commands="show interface terse","show arp expiration-time"
+.
+id: 5b3ca05c02ebd5059ccaea79
 status: succeeded
 parameters:
-  config_text: hostname something
+  commands:
+  - show interface terse
+  - show arp expiration-time
   hostname: 192.168.100.11
 result:
   exit_code: 0
-  result: load (merge) successful on 192.168.100.11
+  result:
+    raw:
+      show arp expiration-time: '
+        MAC Address       Address         Name                      Interface           Flags    TTE
+        52:54:00:12:35:02 10.0.2.2        10.0.2.2                  ge-0/0/0.0          none 214
+        52:54:00:12:35:03 10.0.2.3        10.0.2.3                  ge-0/0/0.0          none 1029
+        08:00:27:ef:d4:68 192.168.100.10  192.168.100.10            ge-0/0/1.0          none 342
+        08:00:27:2e:44:32 192.168.100.12  192.168.100.12            ge-0/0/1.0          none 422
+        Total entries: 4
+        '
+      show interface terse: "
+Interface               Admin Link Proto    Local                 Remote
+ge-0/0/0                up    up
+ge-0/0/0.0              up    up   inet     10.0.2.15/24
+gr-0/0/0                up    up
+ip-0/0/0                up    up
+lsq-0/0/0               up    up
+lt-0/0/0                up    up
+mt-0/0/0                up    up
+sp-0/0/0                up    up
+sp-0/0/0.0              up    up   inet
+                                   inet6
+sp-0/0/0.16383          up    up   inet     10.0.0.1            --> 10.0.0.16
+                                            10.0.0.6            --> 0/0
+                                            128.0.0.1           --> 128.0.1.16
+                                            128.0.0.6           --> 0/0
+ge-0/0/1                up    up
+ge-0/0/1.0              up    up   inet     192.168.100.11/24
+ge-0/0/2                up    up
+dsc                     up    up
+gre                     up    up
+ipip                    up    up
+irb                     up    up
+lo0                     up    up
+lo0.16384               up    up   inet     127.0.0.1           --> 0/0
+lo0.16385               up    up   inet     10.0.0.1            --> 0/0
+                                            10.0.0.16           --> 0/0
+                                            128.0.0.1           --> 0/0
+                                            128.0.0.4           --> 0/0
+                                            128.0.1.16          --> 0/0
+lo0.32768               up    up
+lsi                     up    up
+mtun                    up    up
+pimd                    up    up
+pime                    up    up
+pp0                     up    up
+ppd0                    up    up
+ppe0                    up    up
+st0                     up    up
+tap                     up    up
+vlan                    up    down
+"
+    raw_array:
+      show arp expiration-time:
+      - ''
+      - MAC Address       Address         Name                      Interface           Flags    TTE
+      - 52:54:00:12:35:02 10.0.2.2        10.0.2.2                  ge-0/0/0.0          none 214
+      - 52:54:00:12:35:03 10.0.2.3        10.0.2.3                  ge-0/0/0.0          none 1029
+      - 08:00:27:ef:d4:68 192.168.100.10  192.168.100.10            ge-0/0/1.0          none 342
+      - 08:00:27:2e:44:32 192.168.100.12  192.168.100.12            ge-0/0/1.0          none 422
+      - 'Total entries: 4'
+      - ''
+      show interface terse:
+      - ''
+      - Interface               Admin Link Proto    Local                 Remote
+      - 'ge-0/0/0                up    up  '
+      - 'ge-0/0/0.0              up    up   inet     10.0.2.15/24    '
+      - 'gr-0/0/0                up    up  '
+      - 'ip-0/0/0                up    up  '
+      - 'lsq-0/0/0               up    up  '
+      - 'lt-0/0/0                up    up  '
+      - 'mt-0/0/0                up    up  '
+      - 'sp-0/0/0                up    up  '
+      - 'sp-0/0/0.0              up    up   inet    '
+      - '                                   inet6   '
+      - sp-0/0/0.16383          up    up   inet     10.0.0.1            --> 10.0.0.16
+      - '                                            10.0.0.6            --> 0/0'
+      - '                                            128.0.0.1           --> 128.0.1.16'
+      - '                                            128.0.0.6           --> 0/0'
+      - 'ge-0/0/1                up    up  '
+      - ge-0/0/1.0              up    up   inet     192.168.100.11/24
+      - 'ge-0/0/2                up    up  '
+      - 'dsc                     up    up  '
+      - 'gre                     up    up  '
+      - 'ipip                    up    up  '
+      - 'irb                     up    up  '
+      - 'lo0                     up    up  '
+      - lo0.16384               up    up   inet     127.0.0.1           --> 0/0
+      - lo0.16385               up    up   inet     10.0.0.1            --> 0/0
+      - '                                            10.0.0.16           --> 0/0'
+      - '                                            128.0.0.1           --> 0/0'
+      - '                                            128.0.0.4           --> 0/0'
+      - '                                            128.0.1.16          --> 0/0'
+      - 'lo0.32768               up    up  '
+      - 'lsi                     up    up  '
+      - 'mtun                    up    up  '
+      - 'pimd                    up    up  '
+      - 'pime                    up    up  '
+      - 'pp0                     up    up  '
+      - 'ppd0                    up    up  '
+      - 'ppe0                    up    up  '
+      - 'st0                     up    up  '
+      - 'tap                     up    up  '
+      - vlan                    up    down
+      - ''
   stderr: ''
   stdout: ''
 ```
@@ -137,7 +268,7 @@ To register a new action:
 * Tell the system that the action is available.
 * The actions are grouped in packs and located at /opt/stackstorm/packs
 
-## 
+##
 
 ```
 cat /opt/stackstorm/packs/napalm/actions/cli.py
@@ -169,19 +300,19 @@ class NapalmCLI(NapalmBaseAction):
 ## Workflow
 
 * Actions, by design, are intended to perfom a single task well
-* However, in real world, we usually run several discrte tasks, and includes some decision making along the way -> Workflows
+* However, in real world we usually run several discrete tasks and include some decision making along the way -> Workflows
 * **Mistral** is an OpenStack project that provides (included in ST2):
     * A standarised YAML-based language for defining workflows
-    * Open source software for receiving and processing workflows execution requests 
+    * Open source software for receiving and processing workflows execution requests
 
 
 ## Example Workflow
 
 ```
---- 
+---
 version:'2.0'
 napalm.interface_down_workflow:
-  input: 
+  input:
     - hostname
     - interface
   type: direct
@@ -209,95 +340,109 @@ napalm.interface_down_workflow:
 ##
 
 ```
-st2 run napalm.interface_down_workflow hostname=192.168.100.11 interface=Ethernet1 message=debug
-..
-id: 5b3a913902ebd506863c8ea4
+% st2 run napalm.interface_down_workflow hostname=192.168.100.11 interface=ge-0/0/1 message=debug
+........
+id: 5b3ca25502ebd5059ccaea7c
 action.ref: napalm.interface_down_workflow
 parameters:
   hostname: 192.168.100.11
-  interface: Ethernet1
+  interface: ge-0/0/1
   message: debug
 status: failed
 result_task: show_log
 result:
-  exit_code: 1
-traceback: None
-failed_on: show_log
-
-+--------------------------+------------------------+--------------+--------------+-----------------+
-| id                       | status                 | task         | action       | start_timestamp |
-+--------------------------+------------------------+--------------+--------------+-----------------+
-| 5b3a913902ebd506863c8ea7 | succeeded (1s elapsed) | show_interfa | napalm.get_i | Mon, 02 Jul     |
-|                          |                        | ce           | nterfaces    | 2018 20:55:21   |
-|                          |                        |              |              | UTC             |
-| 5b3a913a02ebd506863c8ea9 | succeeded (1s elapsed) | show_interfa | napalm.get_i | Mon, 02 Jul     |
-|                          |                        | ce_counters  | nterfaces    | 2018 20:55:22   |
-|                          |                        |              |              | UTC             |
-| 5b3a913c02ebd506863c8eab | failed (1s elapsed)    | show_log     | napalm.get_l | Mon, 02 Jul     |
-|                          |                        |              | og           | 2018 20:55:23   |
-|                          |                        |              |              | UTC             |
-+--------------------------+------------------------+--------------+--------------+-----------------+
-
+  exit_code: 0
+  result:
+    html: '<pre>Jul  4 10:33:07  r1 file[2345]: UI_CHILD_WAITPID: waitpid failed: PID 0, rc 2347, status 0: Message too long
+Jul  4 10:33:07  r1 PERF_MON: RTPERF_CPU_THRESHOLD_EXCEEDED: FPC 0 PIC 0 CPU utilization exceeds threshold, current value=95
+Jul  4 10:33:07  r1 file[2345]: UI_CMDLINE_READ_LINE: User ''root'', command ''command rpc rpc command set cli screen-length 0 ''
+Jul  4 10:33:07  r1 file[2345]: UI_NETCONF_CMD: User ''root'' used NETCONF client to run command ''set cli screen-length length=0''
+Jul  4 10:33:07  r1 file[2348]: UI_CHILD_START: Starting child ''/usr/sbin/cli''
+Jul  4 10:33:07  r1 file[2345]: UI_CHILD_STATUS: Cleanup child ''/usr/sbin/cli'', PID 0, status 0
+Jul  4 10:33:07  r1 file[2345]: UI_CHILD_WAITPID: waitpid failed: PID 0, rc 2348, status 0: Unknown error: 0
+Jul  4 10:33:07  r1 file[2345]: UI_CMDLINE_READ_LINE: User ''root'', command ''command rpc rpc command show log messages ''
+Jul  4 10:33:07  r1 file[2345]: UI_NETCONF_CMD: User ''root'' used NETCONF client to run command ''get-log filename=messages''
+Jul  4 10:33:07  r1 file[2349]: UI_CHILD_START: Starting child ''/usr/sbin/cli''</pre>'
+    raw:
+    - 'Jul  4 10:33:07  r1 file[2345]: UI_CHILD_WAITPID: waitpid failed: PID 0, rc 2347, status 0: Message too long'
+    - 'Jul  4 10:33:07  r1 PERF_MON: RTPERF_CPU_THRESHOLD_EXCEEDED: FPC 0 PIC 0 CPU utilization exceeds threshold, current value=95'
+    - 'Jul  4 10:33:07  r1 file[2345]: UI_CMDLINE_READ_LINE: User ''root'', command ''command rpc rpc command set cli screen-length 0 '''
+    - 'Jul  4 10:33:07  r1 file[2345]: UI_NETCONF_CMD: User ''root'' used NETCONF client to run command ''set cli screen-length length=0'''
+    - 'Jul  4 10:33:07  r1 file[2348]: UI_CHILD_START: Starting child ''/usr/sbin/cli'''
+    - 'Jul  4 10:33:07  r1 file[2345]: UI_CHILD_STATUS: Cleanup child ''/usr/sbin/cli'', PID 0, status 0'
+    - 'Jul  4 10:33:07  r1 file[2345]: UI_CHILD_WAITPID: waitpid failed: PID 0, rc 2348, status 0: Unknown error: 0'
+    - 'Jul  4 10:33:07  r1 file[2345]: UI_CMDLINE_READ_LINE: User ''root'', command ''command rpc rpc command show log messages '''
+    - 'Jul  4 10:33:07  r1 file[2345]: UI_NETCONF_CMD: User ''root'' used NETCONF client to run command ''get-log filename=messages'''
+    - 'Jul  4 10:33:07  r1 file[2349]: UI_CHILD_START: Starting child ''/usr/sbin/cli'''
+  stderr: ''
+  stdout: ''
+start_timestamp: Wed, 04 Jul 2018 10:32:53 UTC
+end_timestamp: Wed, 04 Jul 2018 10:33:09 UTC
++--------------------------+------------------------+-------------------------+-----------------------+-------------------------------+
+| id                       | status                 | task                    | action                | start_timestamp               |
++--------------------------+------------------------+-------------------------+-----------------------+-------------------------------+
+| 5b3ca25602ebd5059ccaea7f | succeeded (4s elapsed) | show_interface          | napalm.get_interfaces | Wed, 04 Jul 2018 10:32:54 UTC |
+| 5b3ca25a02ebd5059ccaea81 | succeeded (5s elapsed) | show_interface_counters | napalm.get_interfaces | Wed, 04 Jul 2018 10:32:58 UTC |
+| 5b3ca25f02ebd5059ccaea83 | succeeded (6s elapsed) | show_log                | napalm.get_log        | Wed, 04 Jul 2018 10:33:03 UTC |
++--------------------------+------------------------+-------------------------+-----------------------+-------------------------------+
 ```
 
 ##
 
 ```
-st2 execution get 5b3a913a02ebd506863c8ea9
-id: 5b3a913a02ebd506863c8ea9
-status: succeeded (1s elapsed)
+% st2 execution get 5b3ca25602ebd5059ccaea7f
+id: 5b3ca25602ebd5059ccaea7f
+status: succeeded (4s elapsed)
+parameters:
+  hostname: 192.168.100.11
+  htmlout: true
+  interface: ge-0/0/1
+result:
+  exit_code: 0
+  result:
+    html: <table class="napalm"><tr><th>is_enabled</th><td>True</td></tr><tr><th>description</th><td></td></tr><tr><th>last_flapped</th><td>1698.0</td></tr><tr><th>is_up</th><td>True</td></tr><tr><th>mac_address</th><td>08:00:27:47:0B:31</td></tr><tr><th>speed</th><td>1000</td></tr><tr><th>name</th><td>ge-0/0/1</td></tr></table>
+    raw:
+      description: ''
+      is_enabled: true
+      is_up: true
+      last_flapped: 1698.0
+      mac_address: 08:00:27:47:0B:31
+      name: ge-0/0/1
+      speed: 1000
+  stderr: ''
+  stdout: ''
+```
+
+##
+
+```
+% st2 execution get 5b3ca25a02ebd5059ccaea81
+id: 5b3ca25a02ebd5059ccaea81
+status: succeeded (5s elapsed)
 parameters:
   counters: true
   hostname: 192.168.100.11
   htmlout: true
-  interface: Ethernet1
+  interface: ge-0/0/1
 result:
   exit_code: 0
   result:
-    html: <table class="napalm"><tr><th>tx_multicast_packets</th><td>495</td></tr><tr><th>tx_discards</th><td>0</td></tr><tr><th>tx_octets</th><td>234450</td></tr><tr><th>tx_errors</th><td>0</td></tr><tr><th>rx_octets</th><td>167884</td></tr><tr><th>tx_unicast_packets</th><td>490</td></tr><tr><th>rx_errors</th><td>0</td></tr><tr><th>tx_broadcast_packets</th><td>0</td></tr><tr><th>rx_multicast_packets</th><td>184</td></tr><tr><th>rx_broadcast_packets</th><td>50</td></tr><tr><th>rx_discards</th><td>0</td></tr><tr><th>rx_unicast_packets</th><td>487</td></tr><tr><th>name</th><td>Ethernet1</td></tr></table>
+    html: <table class="napalm"><tr><th>tx_multicast_packets</th><td>0</td></tr><tr><th>tx_discards</th><td>0</td></tr><tr><th>tx_octets</th><td>17180951</td></tr><tr><th>tx_errors</th><td>0</td></tr><tr><th>rx_octets</th><td>29669628</td></tr><tr><th>tx_unicast_packets</th><td>158297</td></tr><tr><th>rx_errors</th><td>0</td></tr><tr><th>tx_broadcast_packets</th><td>0</td></tr><tr><th>rx_multicast_packets</th><td>0</td></tr><tr><th>rx_broadcast_packets</th><td>0</td></tr><tr><th>rx_discards</th><td>0</td></tr><tr><th>rx_unicast_packets</th><td>430419</td></tr><tr><th>name</th><td>ge-0/0/1</td></tr></table>
     raw:
-      name: Ethernet1
-      rx_broadcast_packets: 50
+      name: ge-0/0/1
+      rx_broadcast_packets: 0
       rx_discards: 0
       rx_errors: 0
-      rx_multicast_packets: 184
-      rx_octets: 167884
-      rx_unicast_packets: 487
+      rx_multicast_packets: 0
+      rx_octets: 29669628
+      rx_unicast_packets: 430419
       tx_broadcast_packets: 0
       tx_discards: 0
       tx_errors: 0
-      tx_multicast_packets: 495
-      tx_octets: 234450
-      tx_unicast_packets: 490
+      tx_multicast_packets: 0
+      tx_octets: 17180951
+      tx_unicast_packets: 158297
   stderr: ''
-  stdout: ''
-
-```
-
-##
-
-```
-st2 execution get 5b3a913c02ebd506863c8eab
-id: 5b3a913c02ebd506863c8eab
-status: failed (1s elapsed)
-parameters:
-  hostname: 192.168.100.11
-  htmlout: true
-  lastlines: 10
-result:
-  exit_code: 1
-  result: None
-  stderr: "Traceback (most recent call last):
-  File "/opt/stackstorm/runners/python_runner/python_runner/python_action_wrapper.py", line 320, in <module>
-    obj.run()
-  File "/opt/stackstorm/runners/python_runner/python_runner/python_action_wrapper.py", line 179, in run
-    output = action.run(**self._parameters)
-  File "/opt/stackstorm/packs/napalm/actions/get_log.py", line 40, in run
-    cmd_result = device.cli(commands)
-  File "/opt/stackstorm/virtualenvs/napalm/lib/python2.7/site-packages/napalm/eos/eos.py", line 644, in cli
-    raise CommandErrorException(str(cli_output))
-napalm.base.exceptions.CommandErrorException: {u'term width 32767': u'Invalid command: "term width 32767"'}
-"
   stdout: ''
 ```
 
